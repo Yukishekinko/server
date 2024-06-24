@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -54,13 +54,20 @@ model PortfolioPhoto {
 }
 
 model Backstage {
-  id        Int     @id @default(autoincrement())
-  name      String
-  published Boolean
+  id             String              @id @default(uuid())
+  name           String
+  BackstagePhoto BackstagePhoto[]
+}
+
+model BackstagePhoto {
+  id          String    @id @default(uuid())
+  path        String
+  backstage   Backstage @relation(fields: [backstageId], references: [id], onDelete: Cascade)
+  backstageId String
 }
 
 model Preset {
-  id          Int     @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   name        String
   description String
   price       Float
